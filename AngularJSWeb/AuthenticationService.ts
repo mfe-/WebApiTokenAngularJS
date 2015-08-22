@@ -14,10 +14,12 @@
 
         $rootScope.$on("$locationChangeStart", this.LocationStartChangeEvent.bind(this));
     }
-    public login(login: Login): void {
+    public login(login: Login): ng.IPromise<{}> {
         this.Resolve = this.http.post("http://localhost:5117/api/User/PostLogin", login);
 
         this.Resolve = this.Resolve.then(this.setLogin.bind(this));
+
+        return this.Resolve;
     }
 
     public setLogin(data: ng.IHttpPromiseCallbackArg<string>, status: number, headers: ng.IHttpHeadersGetter, config: ng.IRequestConfig): void {

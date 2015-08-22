@@ -11,9 +11,10 @@
                 <input type="password" class="form-control" ng-model="vm.Login.Password" id="pwd">
             </div>
             <button type="submit" class="btn btn-default" ng-click="vm.onClick()">Submit</button>
+            <span style="color:red" ng-show="vm.LoginFailed">Wrong username or password.</span>
         </form>
     </div>
-    <div ng-if="vm.authenticationService.IsAuthenticated==false">
+    <div ng-if="vm.authenticationService.IsAuthenticated==true">
         you are still logged in.
     </div>
 </div>

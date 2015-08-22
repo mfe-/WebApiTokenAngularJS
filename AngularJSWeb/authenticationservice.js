@@ -9,6 +9,7 @@ var AuthenticationService = (function () {
     AuthenticationService.prototype.login = function (login) {
         this.Resolve = this.http.post("http://localhost:5117/api/User/PostLogin", login);
         this.Resolve = this.Resolve.then(this.setLogin.bind(this));
+        return this.Resolve;
     };
     AuthenticationService.prototype.setLogin = function (data, status, headers, config) {
         this.Token = data.data;
