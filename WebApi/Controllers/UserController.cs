@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IdentityModel.Protocols.WSTrust;
 using System.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Http;
@@ -28,7 +30,7 @@ namespace WebApi.Controllers
                 //http://stackoverflow.com/questions/18223868/how-to-encrypt-jwt-security-token
                 var tokenHandler = new JwtSecurityTokenHandler();
 
-                X509Certificate2 cert = new X509Certificate2("filename.pfx", "password", X509KeyStorageFlags.MachineKeySet);
+                X509Certificate2 cert = new X509Certificate2(Path.Combine(AssemblyDirectory, "private.localhost.pfx"), "localhost", X509KeyStorageFlags.MachineKeySet);
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
                 {
@@ -37,7 +39,7 @@ namespace WebApi.Controllers
                      new Claim(ClaimTypes.Role, "admin")
                  });
 
-                var token = (JwtSecurityToken)tokenHandler.CreateToken(issuer: "http://localhost", audience: "http://localhost", subject: claimsIdentity, expires: expires);
+                var token = (JwtSecurityToken)tokenHandler.CreateToken(issuer: "http://localhost", audience: "http://localhost", subject: claimsIdentity, expires: expires, signingCredentials: new X509SigningCredentials(cert));
                 var tokenString = tokenHandler.WriteToken(token);
                 return Ok<String>(tokenString);
             }
@@ -47,7 +49,17 @@ namespace WebApi.Controllers
         [ClaimsAuthorization(ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role", ClaimValue = "admin")]
         public IHttpActionResult GetLogin()
         {
-            return Ok(this.User.Identity as ClaimsPrincipal);
+            return Ok((this.User as ClaimsPrincipal).Claims);
+        }
+        public static string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
         }
     }
 }
