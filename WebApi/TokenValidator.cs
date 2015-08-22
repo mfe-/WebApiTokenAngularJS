@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Selectors;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
@@ -36,7 +37,9 @@ namespace WebApi
             if (!TryRetrieveToken(request, out token))
             {
                 statusCode = HttpStatusCode.Unauthorized;
-                return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
+                //we allow requests with no token
+                //return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
+                return base.SendAsync(request, cancellationToken);
             }
 
             try
@@ -48,14 +51,20 @@ namespace WebApi
                 //           X509FindType.FindByThumbprint, 
                 //           "C1677FBE7BDD6B131745E900E3B6764B4895A226",
                 //           false)[0];
-                //store.Close();
+                //store.Close(); https://self-issued.info/docs/draft-ietf-oauth-json-web-token.html
+                // http://blog.pluralsight.com/selfcert-create-a-self-signed-certificate-interactively-gui-or-programmatically-in-net
 
                 SecurityToken securityToken;
                 JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
                 TokenValidationParameters validationParameters = new TokenValidationParameters()
                 {
                     ValidAudience = "http://localhost",
-                    ValidIssuer = "http://localhost"
+                    ValidIssuer = "http://localhost",
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = false,
+                    IssuerSigningToken = null,
+                    CertificateValidator = X509CertificateValidator.None,
                     //SigningToken = new X509SecurityToken(cert)
                 };
 
@@ -66,7 +75,7 @@ namespace WebApi
 
                 return base.SendAsync(request, cancellationToken);
             }
-            catch (ArgumentException e)
+            catch (SecurityTokenValidationException e)
             {
                 statusCode = HttpStatusCode.Unauthorized;
             }
@@ -76,7 +85,6 @@ namespace WebApi
             }
             return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
         }
-
 
     }
 }

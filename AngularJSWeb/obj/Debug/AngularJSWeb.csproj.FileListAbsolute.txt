@@ -15,4 +15,3 @@ c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\Angul
 c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\AngularJSWeb\bin\System.Web.Mvc.xml
 c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\AngularJSWeb\obj\Debug\AngularJSWeb.dll
 c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\AngularJSWeb\obj\Debug\AngularJSWeb.pdb
-c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\AngularJSWeb\obj\Debug\AngularJSWeb.csprojResolveAssemblyReference.cache

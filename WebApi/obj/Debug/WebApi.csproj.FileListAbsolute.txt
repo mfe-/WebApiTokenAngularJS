@@ -14,4 +14,9 @@ c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebAp
 c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\System.IdentityModel.Tokens.Jwt.dll
 c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\System.IdentityModel.Tokens.Jwt.pdb
 c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\System.IdentityModel.Tokens.Jwt.xml
-c:\users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\obj\Debug\WebApi.csprojResolveAssemblyReference.cache
+C:\Users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\System.Web.Cors.dll
+C:\Users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\System.Web.Http.Cors.dll
+C:\Users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\System.Web.Http.Cors.xml
+C:\Users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\private.localhost.pfx
+C:\Users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\bin\public.localhost.cer
+C:\Users\martin\documents\visual studio 2013\Projects\WebApiTokenAngularJS\WebApi\obj\Debug\WebApi.csprojResolveAssemblyReference.cache

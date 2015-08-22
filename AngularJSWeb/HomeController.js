@@ -1,9 +1,10 @@
 var HomeController = (function () {
-    function HomeController($scope, $authenticationService) {
+    function HomeController($scope, $http) {
+        this.$http = $http;
         this.scope = $scope;
-        this.authenticationService = $authenticationService;
+        this.CurrentUser = this.$http.get("http://localhost:5117/api/User/GetLogin");
     }
-    HomeController.$inject = ["$scope", "AuthenticationService"];
+    HomeController.$inject = ["$scope", "$http"];
     return HomeController;
 })();
 //# sourceMappingURL=HomeController.js.map

@@ -5,28 +5,23 @@ class app {
     constructor() {
         var app = angular.module("app", ['ngRoute']);
 
-        app.service("AuthenticationService", ["$rootScope", "$http", AuthenticationService]);
+        app.service("AuthenticationService", ["$rootScope", "$http","$location", AuthenticationService]);
 
         this.App = app;
-        //app.run(['$rootScope', '$route', 'AuthenticationService', '$location',
-        //    function ($rootScope: ng.IRootScopeService, $route: angular.route.IRouteService, authenticationService: AuthenticationService, $location: ng.ILocationService) {
-
-        //        $route.reload();
-
-        //        $rootScope.$on("$locationChangeStart",(event: ng.IAngularEvent, args: any) => {
-        //            if (authenticationService.IsAuthenticated == false) {
-        //                $location.path('/login');
-        //            }
-        //        }).bind(this);
-
-        //    }]);
+        app.run(['$rootScope', '$route', 'AuthenticationService', '$location',
+            function ($rootScope: ng.IRootScopeService, $route: angular.route.IRouteService, authenticationService: AuthenticationService, $location: ng.ILocationService) {
+                $route.reload();
+                if (authenticationService.IsAuthenticated == false) {
+                    $location.path('/login');
+                }
+            }]);
     }
     public App: ng.IModule;
 }
 var a = new app();
-a.App.controller("HomeController", ["$scope", "AuthenticationService", HomeController]);
-a.App.controller("LoginController", ["$scope", "AuthenticationService", LoginController]);
 
+a.App.controller("HomeController", ["$scope", "$http", HomeController]);
+a.App.controller("LoginController", ["$scope", "AuthenticationService", "$location", LoginController]);
 
 a.App.config([
     <any>'$routeProvider', function routes($routeProvider: ng.route.IRouteProvider) {
@@ -34,7 +29,6 @@ a.App.config([
             .when('/login',
             {
                 templateUrl: '/login.html',
-                name: "Home",
                 resolve: {
                     "AuthenticationService": ["AuthenticationService", function (authenticationService: AuthenticationService) {
                         return authenticationService.Resolve;
@@ -43,11 +37,11 @@ a.App.config([
             })
             .when('/home',
             {
-                templateUrl: '/home.html',
-                name: "Home"
+                templateUrl: '/home.html'
             })
             .otherwise(
             {
                 redirectTo: '/login'
             });
     }]);
+
