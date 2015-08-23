@@ -65,8 +65,7 @@ namespace WebApi
                 {
                     ValidAudience = "http://localhost",
                     ValidIssuer = "http://localhost",
-                    IssuerSigningToken = new X509SecurityToken(cert),
-                    CertificateValidator = X509CertificateValidator.None,
+                    IssuerSigningToken = new X509SecurityToken(cert)
                 };
 
                 Thread.CurrentPrincipal = handler.ValidateToken(token, validationParameters, out securityToken);
