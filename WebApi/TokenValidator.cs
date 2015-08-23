@@ -37,11 +37,11 @@ namespace WebApi
             HttpStatusCode statusCode;
             string token;
 
+            //determine whether a jwt exists or not
             if (!TryRetrieveToken(request, out token))
             {
                 statusCode = HttpStatusCode.Unauthorized;
-                //we allow requests with no token
-                //return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
+                //allow requests with no token - whether a action method needs an authentication can be set with the claimsauthorization attribute
                 return base.SendAsync(request, cancellationToken);
             }
 
@@ -56,7 +56,7 @@ namespace WebApi
                 //           false)[0];
                 //store.Close(); https://self-issued.info/docs/draft-ietf-oauth-json-web-token.html
                 // http://blog.pluralsight.com/selfcert-create-a-self-signed-certificate-interactively-gui-or-programmatically-in-net
-
+                //get the public key
                 X509Certificate2 cert = new X509Certificate2(Path.Combine(UserController.AssemblyDirectory, "public.localhost.cer"), "localhost");
 
                 SecurityToken securityToken;
@@ -65,13 +65,15 @@ namespace WebApi
                 {
                     ValidAudience = "http://localhost",
                     ValidIssuer = "http://localhost",
-                    IssuerSigningToken = new X509SecurityToken(cert)
+                    ValidateLifetime = true,
+                    IssuerSigningToken = new X509SecurityToken(cert),
+                    LifetimeValidator = this.LifetimeValidator
                 };
-
+                //extract and assign the user of the jwt
                 Thread.CurrentPrincipal = handler.ValidateToken(token, validationParameters, out securityToken);
                 HttpContext.Current.User = handler.ValidateToken(token, validationParameters, out securityToken);
 
-                //check here if the web.config contains a set ClaimsTransformation
+                //todo check here if the web.config contains a ClaimsTransformation class
 
                 return base.SendAsync(request, cancellationToken);
             }
@@ -84,6 +86,14 @@ namespace WebApi
                 statusCode = HttpStatusCode.InternalServerError;
             }
             return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
+        }
+        public bool LifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+        {
+            if(expires!=null)
+            {
+                if (DateTime.UtcNow < expires) return true;
+            }
+            return false;
         }
 
     }

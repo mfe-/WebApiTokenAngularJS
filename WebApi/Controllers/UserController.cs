@@ -24,22 +24,24 @@ namespace WebApi.Controllers
         {
             if (login != null && login.Logon == "martin")
             {
-                DateTime expires = DateTime.Now.AddDays(1);
+                //set the time when it expires
+                DateTime expires = DateTime.UtcNow.AddDays(1);
 
                 //http://stackoverflow.com/questions/18223868/how-to-encrypt-jwt-security-token
                 var tokenHandler = new JwtSecurityTokenHandler();
-
+                //get private key
                 X509Certificate2 cert = new X509Certificate2(Path.Combine(AssemblyDirectory, "private.localhost.pfx"), "localhost", X509KeyStorageFlags.MachineKeySet);
-
+                //create a identity and add claims to the user which we want to log in
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
                 {
                      new Claim(ClaimTypes.Name, login.Logon),
                      new Claim("custom claim type", "custom content"),
                      new Claim(ClaimTypes.Role, "admin")
                  });
-
+                //create the jwt 
                 var token = (JwtSecurityToken)tokenHandler.CreateToken(issuer: "http://localhost", audience: "http://localhost", subject: claimsIdentity, expires: expires, signingCredentials: new X509SigningCredentials(cert));
                 var tokenString = tokenHandler.WriteToken(token);
+                //return the token
                 return Ok<String>(tokenString);
             }
             return new BadRequestResult(this);
