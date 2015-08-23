@@ -20,7 +20,6 @@ namespace WebApi.Controllers
     public class UserController : ApiController
     {
         [HttpPost]
-        [HttpGet]
         public IHttpActionResult PostLogin([FromBody]LoginViewModel login)
         {
             if (login != null && login.Logon == "martin")
