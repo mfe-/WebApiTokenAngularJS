@@ -7,4 +7,4 @@ Press F5 to start the Web Project and navigate to http://localhost:5118/Default/
 Then switch to Visual Studio and right click on the WebApi Project and select Debug àStart new Instance. 
 Create some breakpoints and try to login with the user martin in the web application and step through the program to see what’s happening.
 ##Remarks
-The corresponding blog article can be found here http://get-the-solution.net/index-blog-1-14-176-Add-Token-Authorizat.html
+The corresponding blog article can be found here http://get-the-solution.net/2015/08/23/add-token-authorization-to-angularjs-and-webapi/
